@@ -1,58 +1,26 @@
 'use strict';
 
 const list = document.querySelector('ul');
-const employees = [...document.querySelectorAll('li')];
 
-const clearSalaries = () => {
-  const salaries = [];
+const sortList = (listElement) => {
+  const items = [...listElement.querySelectorAll('li')];
 
-  employees.forEach((el) => {
-    const sal = el.dataset.salary;
+  items.sort((a, b) => {
+    const salA = +a.dataset.salary.replace(/\D/g, '');
+    const salB = +b.dataset.salary.replace(/\D/g, '');
 
-    salaries.push(+sal.replace(/\D/g, ''));
+    return salB - salA;
   });
 
-  return salaries;
+  return items;
 };
 
-const sortList = () => clearSalaries().sort((a, b) => b - a);
-const sortedSalaries = sortList();
-
-const getEmployees = () => {
-  const correctEmployees = [];
-
-  sortedSalaries.forEach((el) => {
-    const employee = employees.find((element) => {
-      return +element.dataset.salary.replace(/\D/g, '') === el;
-    });
-
-    const currentEmploeey = {
-      name: employee.textContent.trim(),
-      position: employee.dataset.position,
-      salary: employee.dataset.salary,
-      age: employee.dataset.age,
-    };
-
-    correctEmployees.push(currentEmploeey);
+const getEmployees = (listElement, sortedItems) => {
+  sortedItems.forEach((li) => {
+    listElement.appendChild(li);
   });
-
-  return correctEmployees;
 };
 
-const res = getEmployees();
+const sortedElements = sortList(list);
 
-const render = res.map((el) => {
-  const html = `
-  <li
-      data-salary="${el.salary}"
-      data-position="${el.position}"
-      data-age="${el.age}"
-      >
-      ${el.name}
-      </li>
-      `;
-
-  return html;
-});
-
-list.innerHTML = render.join('');
+getEmployees(list, sortedElements);
