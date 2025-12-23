@@ -1,5 +1,6 @@
 'use strict';
 
+const list = document.querySelector('ul');
 const employees = [...document.querySelectorAll('li')];
 
 const clearSalaries = () => {
@@ -14,11 +15,11 @@ const clearSalaries = () => {
   return salaries;
 };
 
-const sortList = () => clearSalaries().sort((a, b) => a - b);
+const sortList = () => clearSalaries().sort((a, b) => b - a);
+const sortedSalaries = sortList();
 
 const getEmployees = () => {
   const correctEmployees = [];
-  const sortedSalaries = sortList();
 
   sortedSalaries.forEach((el) => {
     const employee = employees.find((element) => {
@@ -38,4 +39,20 @@ const getEmployees = () => {
   return correctEmployees;
 };
 
-getEmployees();
+const res = getEmployees();
+
+const render = res.map((el) => {
+  const html = `
+  <li
+      data-salary="${el.salary}"
+      data-position="${el.position}"
+      data-age="${el.age}"
+      >
+      ${el.name}
+      </li>
+      `;
+
+  return html;
+});
+
+list.innerHTML = render.join('');
